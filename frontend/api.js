@@ -1,10 +1,12 @@
-// my api file for talking to the backend
-// this connects my html pages to the python api
+// SkillSwap API Client
+// Handles all communication between frontend and backend
 
-// backend url - need to change when i put this online
-const API_BASE_URL = 'http://localhost:8000';
+// Environment configuration
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8000'  // Development
+    : 'https://your-api-domain.com';  // Production - UPDATE THIS
 
-// keeping track of logged in user
+// User session management
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
 let authToken = localStorage.getItem('authToken') || null;
 
@@ -67,6 +69,13 @@ class SkillSwapAPI {
             currentUser = response.user;
             localStorage.setItem('authToken', authToken);
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // redirect based on user role
+            if (currentUser.role === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
         }
         
         return response;

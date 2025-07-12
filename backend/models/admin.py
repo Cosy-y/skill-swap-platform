@@ -30,3 +30,16 @@ class ReportData(BaseModel):
     completed_swaps: int
     average_rating: float
     recent_activity: List[dict]
+
+# admin statistics for dashboard
+class AdminStats(BaseModel):
+    total_users: int
+    banned_users: int
+    total_swaps: int
+    pending_swaps: int
+    completed_swaps: int
+    average_rating: float
+    platform_messages: int
+    recent_signups: int  # last 30 days
+    average_rating: float
+    recent_activity: List[dict]

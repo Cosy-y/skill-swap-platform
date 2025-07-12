@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends, Query
 from firebase_init import db
-from models import AdminUserAction, PlatformMessage, PlatformMessageResponse, ReportData, UserRole
+from models.admin import AdminUserAction, PlatformMessage, PlatformMessageResponse, ReportData, AdminStats
+from models.user import UserRole
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
@@ -178,6 +179,72 @@ def delete_platform_message(message_id: str, admin_id: str):
     check_admin_role(admin_id)
     try:
         db.collection("platform_messages").document(message_id).delete()
+        return {"message": "Platform message deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting message: {str(e)}")
+
+@router.get("/stats", response_model=AdminStats)
+def get_admin_dashboard_stats(admin_id: str):
+    # get comprehensive stats for admin dashboard
+    check_admin_role(admin_id)
+    try:
+        # get all users
+        users = list(db.collection("users").stream())
+        total_users = len(users)
+        banned_users = len([u for u in users if u.to_dict().get("is_banned", False)])
+        
+        # recent signups (last 30 days)
+        thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+        recent_signups = 0
+        for user in users:
+            user_data = user.to_dict()
+            created_at = user_data.get("created_at")
+            if created_at:
+                # Handle both datetime objects and strings
+                if isinstance(created_at, str):
+                    try:
+                        created_at = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                    except:
+                        continue
+                elif hasattr(created_at, 'replace'):
+                    # If it's already a datetime, make it UTC aware if needed
+                    if created_at.tzinfo is None:
+                        created_at = created_at.replace(tzinfo=None)
+                    
+                # Compare dates (both should be naive now)
+                if created_at and created_at.replace(tzinfo=None) > thirty_days_ago:
+                    recent_signups += 1
+        
+        # get all swaps
+        swaps = list(db.collection("swaps").stream())
+        total_swaps = len(swaps)
+        pending_swaps = len([s for s in swaps if s.to_dict().get("status") == "pending"])
+        completed_swaps = len([s for s in swaps if s.to_dict().get("status") == "completed"])
+        
+        # calculate average rating
+        reviews = list(db.collection("reviews").stream())
+        if reviews:
+            ratings = [r.to_dict().get("rating", 0) for r in reviews]
+            average_rating = sum(ratings) / len(ratings)
+        else:
+            average_rating = 0.0
+        
+        # count platform messages
+        messages = list(db.collection("platform_messages").stream())
+        platform_messages = len(messages)
+        
+        return AdminStats(
+            total_users=total_users,
+            banned_users=banned_users,
+            total_swaps=total_swaps,
+            pending_swaps=pending_swaps,
+            completed_swaps=completed_swaps,
+            average_rating=round(average_rating, 2),
+            platform_messages=platform_messages,
+            recent_signups=recent_signups
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating stats: {str(e)}")
         return {"message": "Platform message deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting message: {str(e)}")

@@ -22,13 +22,14 @@ class Availability(BaseModel):
 
 # model for creating new users (signup form data)
 class UserCreate(BaseModel):
-    name: str
     email: EmailStr
+    password: str  # Added password field for registration
+    full_name: str  # Changed from 'name' to 'full_name' to match auth.py
     location: Optional[str] = None  # city, state
     bio: Optional[str] = None
     skills_offered: List[Skill] = []  # skills they can teach
     skills_wanted: List[Skill] = []   # skills they want to learn
-    availability: Optional[Availability] = None
+    availability: Optional[dict] = None  # Changed to dict to match auth.py
     is_profile_public: bool = True  # public by default
 
 # for updating existing users
@@ -44,31 +45,43 @@ class UserUpdate(BaseModel):
 
 # full user data response
 class UserResponse(BaseModel):
-    id: str
-    name: str
+    user_id: str  # Changed from 'id' to 'user_id'
     email: str
+    full_name: str  # Changed from 'name' to 'full_name'
     location: Optional[str] = None
     bio: Optional[str] = None
     skills_offered: List[Skill] = []
     skills_wanted: List[Skill] = []
-    availability: Optional[Availability] = None
+    availability: Optional[dict] = None  # Changed to dict
     is_profile_public: bool = True
-    profile_photo_url: Optional[str] = None
-    rating: Optional[float] = None  # user rating from swaps
+    profile_image_url: Optional[str] = None  # Changed from 'profile_photo_url'
+    rating: float = 0.0  # Default to 0.0 instead of Optional
     total_swaps: int = 0  # how many swaps they've done
     role: UserRole = UserRole.USER
     is_banned: bool = False
+    ban_reason: Optional[str] = None
+    banned_at: Optional[datetime] = None
+    banned_by: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
 # what other users can see (public profile)
 class UserPublicResponse(BaseModel):
-    id: str
-    name: str
+    user_id: str  # Changed from 'id' to match database
+    full_name: str  # Changed from 'name' to match database
     location: Optional[str] = None
     bio: Optional[str] = None
     skills_offered: List[Skill] = []
     skills_wanted: List[Skill] = []
-    availability: Optional[Availability] = None
-    rating: Optional[float] = None
+    availability: Optional[dict] = None  # Changed to dict to match database
+    rating: float = 0.0  # Changed to default 0.0
     total_swaps: int = 0
+
+# Authentication models
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+class SuccessResponse(BaseModel):
+    message: str
+    data: Optional[dict] = None
