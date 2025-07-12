@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Skill Swap Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">Skill Swap Platform</h1>
+            <div class="nav-items">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="requests.html" class="nav-link">Swap Requests</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- profile form -->
+    <div class="container">
+        <div class="profile-container">
+            <h2>My Profile</h2>
+            
+            <form class="profile-form" id="profileForm">
+                <!-- profile photo section -->
+                <div class="photo-section">
+                    <div class="current-photo">
+                        <img src="https://via.placeholder.com/150" alt="Profile Photo" id="profileImage">
+                    </div>
+                    <div class="photo-actions">
+                        <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+                        <button type="button" class="btn-secondary" onclick="document.getElementById('photoUpload').click()">
+                            Change Photo
+                        </button>
+                        <button type="button" class="btn-danger" onclick="removePhoto()">Remove</button>
+                    </div>
+                </div>
+
+                <!-- basic info -->
+                <div class="form-section">
+                    <h3>Basic Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" name="name" value="John Doe" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="john@example.com" readonly>
+                        <small>Email cannot be changed</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" value="New York, NY" placeholder="City, State">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea id="bio" name="bio" rows="3" placeholder="Tell others about yourself...">Passionate developer and lifelong learner looking to share knowledge and learn new skills!</textarea>
+                    </div>
+                </div>
+
+                <!-- skills offered -->
+                <div class="form-section">
+                    <h3>Skills I Can Teach</h3>
+                    <div class="skills-input-group">
+                        <div class="skill-input-row">
+                            <input type="text" id="newSkillOffered" placeholder="Add a skill you can teach">
+                            <select id="skillLevelOffered">
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate" selected>Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                            <button type="button" class="btn-add" onclick="addSkill('offered')">Add</button>
+                        </div>
+                        
+                        <div class="skills-list" id="skillsOfferedList">
+                            <div class="skill-item">
+                                <span class="skill-name">JavaScript</span>
+                                <span class="skill-level">Advanced</span>
+                                <button type="button" class="btn-remove" onclick="removeSkill(this)">X</button>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Python</span>
+                                <span class="skill-level">Intermediate</span>
+                                <button type="button" class="btn-remove" onclick="removeSkill(this)">X</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- skills wanted -->
+                <div class="form-section">
+                    <h3>Skills I Want to Learn</h3>
+                    <div class="skills-input-group">
+                        <div class="skill-input-row">
+                            <input type="text" id="newSkillWanted" placeholder="Add a skill you want to learn">
+                            <button type="button" class="btn-add" onclick="addSkill('wanted')">Add</button>
+                        </div>
+                        
+                        <div class="skills-list" id="skillsWantedList">
+                            <div class="skill-item">
+                                <span class="skill-name">Photography</span>
+                                <button type="button" class="btn-remove" onclick="removeSkill(this)">X</button>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">UI/UX Design</span>
+                                <button type="button" class="btn-remove" onclick="removeSkill(this)">X</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- availability -->
+                <div class="form-section">
+                    <h3>Availability</h3>
+                    
+                    <div class="availability-grid">
+                        <div class="form-group">
+                            <label>Days Available</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="days" value="monday" checked> Monday
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="days" value="tuesday"> Tuesday
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="days" value="wednesday" checked> Wednesday
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="days" value="thursday"> Thursday
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="days" value="friday" checked> Friday
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="days" value="saturday" checked> Saturday
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="days" value="sunday"> Sunday
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Time Slots</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="timeSlots" value="morning"> Morning (6AM - 12PM)
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="timeSlots" value="afternoon" checked> Afternoon (12PM - 6PM)
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="timeSlots" value="evening" checked> Evening (6PM - 11PM)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="timezone">Timezone</label>
+                        <select id="timezone" name="timezone">
+                            <option value="UTC">UTC</option>
+                            <option value="EST" selected>Eastern Time</option>
+                            <option value="CST">Central Time</option>
+                            <option value="MST">Mountain Time</option>
+                            <option value="PST">Pacific Time</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- privacy settings -->
+                <div class="form-section">
+                    <h3>Privacy Settings</h3>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="profilePublic" name="profilePublic" checked>
+                            Make my profile public (others can find and contact me)
+                        </label>
+                        <small>If unchecked, only people you've contacted can see your profile</small>
+                    </div>
+                </div>
+
+                <!-- form actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="discardChanges()">Discard Changes</button>
+                    <button type="submit" class="btn-primary">Save Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // skill management functions
+        function addSkill(type) {
+            const inputId = type === 'offered' ? 'newSkillOffered' : 'newSkillWanted';
+            const listId = type === 'offered' ? 'skillsOfferedList' : 'skillsWantedList';
+            const levelId = type === 'offered' ? 'skillLevelOffered' : null;
+            
+            const input = document.getElementById(inputId);
+            const list = document.getElementById(listId);
+            const skillName = input.value.trim();
+            
+            if (!skillName) return;
+            
+            const skillItem = document.createElement('div');
+            skillItem.className = 'skill-item';
+            
+            let skillContent = `<span class="skill-name">${skillName}</span>`;
+            
+            if (type === 'offered') {
+                const level = document.getElementById(levelId).value;
+                skillContent += `<span class="skill-level">${level}</span>`;
+            }
+            
+            skillContent += `<button type="button" class="btn-remove" onclick="removeSkill(this)">X</button>`;
+            
+            skillItem.innerHTML = skillContent;
+            list.appendChild(skillItem);
+            
+            input.value = '';
+        }
+
+        function removeSkill(button) {
+            button.parentElement.remove();
+        }
+
+        // photo management
+        function removePhoto() {
+            document.getElementById('profileImage').src = 'https://via.placeholder.com/150';
+        }
+
+        // handle photo upload
+        document.getElementById('photoUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profileImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // form submission
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // collect form data
+            const formData = new FormData(this);
+            const profileData = {};
+            
+            // basic info
+            profileData.name = formData.get('name');
+            profileData.location = formData.get('location');
+            profileData.bio = formData.get('bio');
+            
+            // collect skills
+            profileData.skillsOffered = [];
+            document.querySelectorAll('#skillsOfferedList .skill-item').forEach(item => {
+                const skill = {
+                    name: item.querySelector('.skill-name').textContent,
+                    proficiency_level: item.querySelector('.skill-level')?.textContent.toLowerCase() || 'intermediate'
+                };
+                profileData.skillsOffered.push(skill);
+            });
+            
+            profileData.skillsWanted = [];
+            document.querySelectorAll('#skillsWantedList .skill-item').forEach(item => {
+                const skill = {
+                    name: item.querySelector('.skill-name').textContent,
+                    proficiency_level: 'beginner' // wanted skills don't have levels
+                };
+                profileData.skillsWanted.push(skill);
+            });
+            
+            // availability
+            const days = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(cb => cb.value);
+            const timeSlots = Array.from(document.querySelectorAll('input[name="timeSlots"]:checked')).map(cb => cb.value);
+            
+            profileData.availability = {
+                days: days,
+                time_slots: timeSlots,
+                timezone: formData.get('timezone')
+            };
+            
+            profileData.is_profile_public = document.getElementById('profilePublic').checked;
+            
+            console.log('Profile data to save:', profileData);
+            
+            // TODO: send to your backend API
+            // fetch('/api/users/current', { method: 'PUT', body: JSON.stringify(profileData) })
+            
+            alert('Profile saved successfully!');
+        });
+
+        function discardChanges() {
+            if (confirm('Are you sure you want to discard all changes?')) {
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

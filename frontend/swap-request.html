@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Skill Swap - Skill Swap Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">Skill Swap Platform</h1>
+            <div class="nav-items">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="requests.html" class="nav-link">Swap Requests</a>
+                <a href="profile.html" class="nav-link">My Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- swap request form -->
+    <div class="container">
+        <div class="swap-request-container">
+            <div class="request-header">
+                <h2>Request Skill Swap</h2>
+                <div class="target-user-info" id="targetUserInfo">
+                    <img src="https://via.placeholder.com/60" alt="Sarah Wilson" id="targetUserPhoto">
+                    <div>
+                        <h3 id="targetUserName">Sarah Wilson</h3>
+                        <p id="targetUserLocation">New York, NY</p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="swap-request-form" id="swapRequestForm">
+                <div class="form-section">
+                    <h3>What skill will you offer?</h3>
+                    <div class="form-group">
+                        <label for="offeredSkill">Choose one of your skills to offer:</label>
+                        <select id="offeredSkill" name="offeredSkill" required>
+                            <option value="">Select a skill you can teach...</option>
+                            <!-- will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="skill-preview" id="offeredSkillPreview" style="display: none;">
+                        <h4>Your Skill:</h4>
+                        <div class="skill-preview-card">
+                            <span class="skill-name" id="offeredSkillName"></span>
+                            <span class="skill-level" id="offeredSkillLevel"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>What skill do you want to learn?</h3>
+                    <div class="form-group">
+                        <label for="requestedSkill">Choose from their offered skills:</label>
+                        <select id="requestedSkill" name="requestedSkill" required>
+                            <option value="">Select a skill you want to learn...</option>
+                            <!-- will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="skill-preview" id="requestedSkillPreview" style="display: none;">
+                        <h4>Their Skill:</h4>
+                        <div class="skill-preview-card">
+                            <span class="skill-name" id="requestedSkillName"></span>
+                            <span class="skill-level" id="requestedSkillLevel"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Message (Optional)</h3>
+                    <div class="form-group">
+                        <label for="message">Tell them about yourself and why you're interested:</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Hi! I'd love to learn photography from you. I'm particularly interested in portrait photography and would be happy to help you with Python development in return. I have experience with web development and data analysis..."></textarea>
+                    </div>
+                </div>
+
+                <!-- swap summary -->
+                <div class="swap-summary" id="swapSummary" style="display: none;">
+                    <h3>Swap Summary</h3>
+                    <div class="summary-content">
+                        <div class="summary-item">
+                            <strong>You will teach:</strong>
+                            <span id="summaryOffered">-</span>
+                        </div>
+                        <div class="swap-arrow">&lt;-&gt;</div>
+                        <div class="summary-item">
+                            <strong>You will learn:</strong>
+                            <span id="summaryRequested">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="goBack()">Cancel</button>
+                    <button type="submit" class="btn-primary">Send Swap Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // sample data - replace with real API calls
+        const currentUserSkills = [
+            { name: 'JavaScript Development', proficiency_level: 'advanced' },
+            { name: 'Python Programming', proficiency_level: 'intermediate' },
+            { name: 'Database Design', proficiency_level: 'intermediate' }
+        ];
+
+        const targetUserSkills = [
+            { name: 'Photography', proficiency_level: 'advanced' },
+            { name: 'Photo Editing', proficiency_level: 'intermediate' },
+            { name: 'Digital Marketing', proficiency_level: 'beginner' }
+        ];
+
+        // get target user ID from URL
+        function getTargetUserId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('userId') || '1';
+        }
+
+        // load target user info and skills
+        function loadSwapRequestData() {
+            const userId = getTargetUserId();
+            
+            // TODO: fetch real data from your backend
+            // fetch(`/api/users/${userId}/public`)
+            
+            // sample target user data
+            const targetUser = {
+                id: userId,
+                name: 'Sarah Wilson',
+                location: 'New York, NY',
+                photo: 'https://via.placeholder.com/60'
+            };
+            
+            displayTargetUser(targetUser);
+            populateSkillDropdowns();
+        }
+
+        // display target user info
+        function displayTargetUser(user) {
+            document.getElementById('targetUserName').textContent = user.name;
+            document.getElementById('targetUserLocation').textContent = user.location;
+            document.getElementById('targetUserPhoto').src = user.photo;
+        }
+
+        // populate skill dropdown options
+        function populateSkillDropdowns() {
+            const offeredSelect = document.getElementById('offeredSkill');
+            const requestedSelect = document.getElementById('requestedSkill');
+            
+            // populate user's skills they can offer
+            currentUserSkills.forEach(skill => {
+                const option = document.createElement('option');
+                option.value = skill.name;
+                option.textContent = `${skill.name} (${skill.proficiency_level})`;
+                option.dataset.level = skill.proficiency_level;
+                offeredSelect.appendChild(option);
+            });
+            
+            // populate target user's skills they can learn
+            targetUserSkills.forEach(skill => {
+                const option = document.createElement('option');
+                option.value = skill.name;
+                option.textContent = `${skill.name} (${skill.proficiency_level})`;
+                option.dataset.level = skill.proficiency_level;
+                requestedSelect.appendChild(option);
+            });
+        }
+
+        // setup form event listeners
+        function setupFormListeners() {
+            const offeredSelect = document.getElementById('offeredSkill');
+            const requestedSelect = document.getElementById('requestedSkill');
+            
+            offeredSelect.addEventListener('change', function() {
+                updateSkillPreview('offered', this);
+                updateSwapSummary();
+            });
+            
+            requestedSelect.addEventListener('change', function() {
+                updateSkillPreview('requested', this);
+                updateSwapSummary();
+            });
+        }
+
+        // update skill preview
+        function updateSkillPreview(type, selectElement) {
+            const preview = document.getElementById(`${type}SkillPreview`);
+            const nameElement = document.getElementById(`${type}SkillName`);
+            const levelElement = document.getElementById(`${type}SkillLevel`);
+            
+            if (selectElement.value) {
+                const selectedOption = selectElement.selectedOptions[0];
+                nameElement.textContent = selectElement.value;
+                levelElement.textContent = selectedOption.dataset.level;
+                levelElement.className = `skill-level ${selectedOption.dataset.level}`;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        // update swap summary
+        function updateSwapSummary() {
+            const offeredSkill = document.getElementById('offeredSkill').value;
+            const requestedSkill = document.getElementById('requestedSkill').value;
+            const summary = document.getElementById('swapSummary');
+            
+            if (offeredSkill && requestedSkill) {
+                document.getElementById('summaryOffered').textContent = offeredSkill;
+                document.getElementById('summaryRequested').textContent = requestedSkill;
+                summary.style.display = 'block';
+            } else {
+                summary.style.display = 'none';
+            }
+        }
+
+        // handle form submission
+        function setupFormSubmission() {
+            document.getElementById('swapRequestForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const swapRequest = {
+                    requestee_id: getTargetUserId(),
+                    requester_skill: formData.get('offeredSkill'),
+                    requested_skill: formData.get('requestedSkill'),
+                    message: formData.get('message')
+                };
+                
+                console.log('Swap request data:', swapRequest);
+                
+                // TODO: send to your backend API
+                // fetch('/api/swaps', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(swapRequest)
+                // })
+                
+                // show success message
+                alert('Swap request sent successfully!');
+                window.location.href = 'requests.html';
+            });
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSwapRequestData();
+            setupFormListeners();
+            setupFormSubmission();
+        });
+    </script>
+</body>
+</html>

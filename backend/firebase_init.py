@@ -11,10 +11,12 @@ try:
         cred = credentials.Certificate(cred_path)
         firebase_admin.initialize_app(cred)
         db = firestore.client()
+        print("Firebase connected successfully!")
     else:
-        print("[WARNING] Firebase key not found. Running in mock mode.")
+        print("[WARNING] Firebase key not found. Running without database.")
         db = None
 
 except Exception as e:
-    print(f"[ERROR] Firebase failed to initialize: {e}")
+    print(f"[ERROR] Firebase setup failed: {e}")
+    print("Running in offline mode...")
     db = None

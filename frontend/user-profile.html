@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Skill Swap Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">Skill Swap Platform</h1>
+            <div class="nav-items">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="requests.html" class="nav-link">Swap Requests</a>
+                <a href="profile.html" class="nav-link">My Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- user profile details -->
+    <div class="container">
+        <div class="profile-detail-container">
+            <div class="profile-header">
+                <div class="profile-photo-large">
+                    <img src="https://via.placeholder.com/200" alt="Sarah Wilson" id="userPhoto">
+                </div>
+                
+                <div class="profile-info">
+                    <h1 id="userName">Sarah Wilson</h1>
+                    <p class="location" id="userLocation">New York, NY</p>
+                    
+                    <div class="rating-section">
+                        <div class="rating-display">
+                            <span class="stars-large">*****</span>
+                            <span class="rating-number-large" id="userRating">4.8</span>
+                        </div>
+                        <p class="rating-text"><span id="totalSwaps">12</span> successful skill swaps</p>
+                    </div>
+                    
+                    <div class="user-bio">
+                        <p id="userBio">Passionate developer and photographer with 5+ years of experience. Love sharing knowledge and learning new creative skills!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- skills sections -->
+            <div class="skills-display-container">
+                <div class="skills-column">
+                    <h3>Skills Offered</h3>
+                    <div class="skills-offered-display" id="skillsOfferedDisplay">
+                        <div class="skill-detail-card">
+                            <h4>Python Development</h4>
+                            <span class="skill-level-badge advanced">Advanced</span>
+                            <p>Full-stack web development, data analysis, automation scripts</p>
+                        </div>
+                        <div class="skill-detail-card">
+                            <h4>Web Development</h4>
+                            <span class="skill-level-badge intermediate">Intermediate</span>
+                            <p>HTML, CSS, JavaScript, React basics</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skills-column">
+                    <h3>Skills Wanted</h3>
+                    <div class="skills-wanted-display" id="skillsWantedDisplay">
+                        <div class="skill-detail-card">
+                            <h4>Photography</h4>
+                            <p>Portrait photography, lighting techniques, photo editing</p>
+                        </div>
+                        <div class="skill-detail-card">
+                            <h4>UI/UX Design</h4>
+                            <p>User interface design, prototyping, design systems</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- availability info -->
+            <div class="availability-display">
+                <h3>Availability</h3>
+                <div class="availability-info">
+                    <div class="availability-item">
+                        <strong>Days:</strong>
+                        <span id="availableDays">Monday, Wednesday, Friday, Saturday</span>
+                    </div>
+                    <div class="availability-item">
+                        <strong>Time Slots:</strong>
+                        <span id="availableTime">Afternoons, Evenings</span>
+                    </div>
+                    <div class="availability-item">
+                        <strong>Timezone:</strong>
+                        <span id="userTimezone">Eastern Time (EST)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- reviews and feedback -->
+            <div class="reviews-section">
+                <h3>Recent Feedback</h3>
+                <div class="reviews-list">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <img src="https://via.placeholder.com/40" alt="Mike Chen" class="reviewer-photo">
+                            <div class="review-info">
+                                <strong>Mike Chen</strong>
+                                <div class="review-rating">*****</div>
+                                <small>2 weeks ago</small>
+                            </div>
+                        </div>
+                        <p class="review-text">"Sarah was an amazing Python teacher! Very patient and explained complex concepts clearly. Highly recommend!"</p>
+                        <small class="swap-details">Swapped: Python Development &lt;-&gt; Photography Basics</small>
+                    </div>
+                    
+                    <div class="review-item">
+                        <div class="review-header">
+                            <img src="https://via.placeholder.com/40" alt="Emma Davis" class="reviewer-photo">
+                            <div class="review-info">
+                                <strong>Emma Davis</strong>
+                                <div class="review-rating">****</div>
+                                <small>1 month ago</small>
+                            </div>
+                        </div>
+                        <p class="review-text">"Great web development session. Sarah knows her stuff and was very helpful with debugging."</p>
+                        <small class="swap-details">Swapped: Web Development &lt;-&gt; Design Feedback</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- action button -->
+            <div class="profile-actions">
+                <button class="btn-primary btn-large" onclick="initiateSwapRequest()">
+                    Request Skill Swap
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // get user ID from URL parameters
+        function getUserIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id') || '1';
+        }
+
+        // load user profile data
+        function loadUserProfile() {
+            const userId = getUserIdFromUrl();
+            
+            // TODO: fetch real data from your backend API
+            // fetch(`/api/users/${userId}/public`)
+            
+            // for now using sample data
+            const userData = {
+                id: userId,
+                name: 'Sarah Wilson',
+                location: 'New York, NY',
+                bio: 'Passionate developer and photographer with 5+ years of experience. Love sharing knowledge and learning new creative skills!',
+                rating: 4.8,
+                totalSwaps: 12,
+                profilePhoto: 'https://via.placeholder.com/200',
+                skillsOffered: [
+                    {
+                        name: 'Python Development',
+                        proficiency_level: 'advanced',
+                        description: 'Full-stack web development, data analysis, automation scripts'
+                    },
+                    {
+                        name: 'Web Development', 
+                        proficiency_level: 'intermediate',
+                        description: 'HTML, CSS, JavaScript, React basics'
+                    }
+                ],
+                skillsWanted: [
+                    {
+                        name: 'Photography',
+                        description: 'Portrait photography, lighting techniques, photo editing'
+                    },
+                    {
+                        name: 'UI/UX Design',
+                        description: 'User interface design, prototyping, design systems'
+                    }
+                ],
+                availability: {
+                    days: ['monday', 'wednesday', 'friday', 'saturday'],
+                    time_slots: ['afternoon', 'evening'],
+                    timezone: 'EST'
+                }
+            };
+            
+            displayUserProfile(userData);
+        }
+
+        // display the user profile data
+        function displayUserProfile(user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userLocation').textContent = user.location;
+            document.getElementById('userBio').textContent = user.bio;
+            document.getElementById('userRating').textContent = user.rating;
+            document.getElementById('totalSwaps').textContent = user.totalSwaps;
+            document.getElementById('userPhoto').src = user.profilePhoto;
+            
+            // display skills offered
+            const skillsOfferedContainer = document.getElementById('skillsOfferedDisplay');
+            skillsOfferedContainer.innerHTML = '';
+            user.skillsOffered.forEach(skill => {
+                const skillCard = document.createElement('div');
+                skillCard.className = 'skill-detail-card';
+                skillCard.innerHTML = `
+                    <h4>${skill.name}</h4>
+                    <span class="skill-level-badge ${skill.proficiency_level}">${skill.proficiency_level}</span>
+                    <p>${skill.description || 'No description provided'}</p>
+                `;
+                skillsOfferedContainer.appendChild(skillCard);
+            });
+            
+            // display skills wanted
+            const skillsWantedContainer = document.getElementById('skillsWantedDisplay');
+            skillsWantedContainer.innerHTML = '';
+            user.skillsWanted.forEach(skill => {
+                const skillCard = document.createElement('div');
+                skillCard.className = 'skill-detail-card';
+                skillCard.innerHTML = `
+                    <h4>${skill.name}</h4>
+                    <p>${skill.description || 'No description provided'}</p>
+                `;
+                skillsWantedContainer.appendChild(skillCard);
+            });
+            
+            // display availability
+            const dayNames = {
+                'monday': 'Monday', 'tuesday': 'Tuesday', 'wednesday': 'Wednesday',
+                'thursday': 'Thursday', 'friday': 'Friday', 'saturday': 'Saturday', 'sunday': 'Sunday'
+            };
+            const timeNames = {
+                'morning': 'Mornings', 'afternoon': 'Afternoons', 'evening': 'Evenings'
+            };
+            
+            const availableDays = user.availability.days.map(day => dayNames[day]).join(', ');
+            const availableTime = user.availability.time_slots.map(time => timeNames[time]).join(', ');
+            
+            document.getElementById('availableDays').textContent = availableDays;
+            document.getElementById('availableTime').textContent = availableTime;
+            document.getElementById('userTimezone').textContent = `${user.availability.timezone} Time`;
+        }
+
+        // initiate swap request
+        function initiateSwapRequest() {
+            const userId = getUserIdFromUrl();
+            window.location.href = `swap-request.html?userId=${userId}`;
+        }
+
+        // load profile when page loads
+        document.addEventListener('DOMContentLoaded', loadUserProfile);
+    </script>
+</body>
+</html>

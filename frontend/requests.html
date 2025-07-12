@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swap Requests - Skill Swap Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">Skill Swap Platform</h1>
+            <div class="nav-items">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="profile.html" class="nav-link">My Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- requests management -->
+    <div class="container">
+        <div class="requests-container">
+            <div class="requests-header">
+                <h2>My Swap Requests</h2>
+                <div class="requests-tabs">
+                    <button class="tab-btn active" onclick="showTab('received')">Received Requests</button>
+                    <button class="tab-btn" onclick="showTab('sent')">Sent Requests</button>
+                </div>
+            </div>
+
+            <!-- received requests tab -->
+            <div class="tab-content active" id="receivedTab">
+                <div class="requests-list" id="receivedRequestsList">
+                    <!-- received requests will be loaded here -->
+                </div>
+                
+                <div class="empty-state" id="receivedEmptyState" style="display: none;">
+                    <p>No received requests yet. Make your profile public so others can find you!</p>
+                </div>
+            </div>
+
+            <!-- sent requests tab -->
+            <div class="tab-content" id="sentTab">
+                <div class="requests-list" id="sentRequestsList">
+                    <!-- sent requests will be loaded here -->
+                </div>
+                
+                <div class="empty-state" id="sentEmptyState" style="display: none;">
+                    <p>No sent requests yet. <a href="home.html">Browse users</a> to find someone to swap skills with!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // sample requests data - replace with real API calls
+        const sampleReceivedRequests = [
+            {
+                id: 'req1',
+                requester_id: 'user2',
+                requester_name: 'Mike Chen',
+                requester_photo: 'https://via.placeholder.com/60',
+                requester_location: 'San Francisco, CA',
+                requester_rating: 4.6,
+                requester_skill: 'Photography',
+                requested_skill: 'Python Development',
+                message: 'Hi Sarah! I\'d love to learn Python from you. I have 3 years of photography experience and can teach portrait and landscape techniques.',
+                status: 'pending',
+                created_at: '2025-01-10T10:30:00Z'
+            },
+            {
+                id: 'req2',
+                requester_id: 'user3',
+                requester_name: 'Emma Davis',
+                requester_photo: 'https://via.placeholder.com/60',
+                requester_location: 'Austin, TX',
+                requester_rating: 4.9,
+                requester_skill: 'UI/UX Design',
+                requested_skill: 'Web Development',
+                message: 'Hello! I\'m a UX designer looking to improve my web development skills. Would love to teach you design principles in exchange!',
+                status: 'pending',
+                created_at: '2025-01-09T14:15:00Z'
+            }
+        ];
+
+        const sampleSentRequests = [
+            {
+                id: 'req3',
+                requestee_id: 'user4',
+                requestee_name: 'Alex Johnson',
+                requestee_photo: 'https://via.placeholder.com/60',
+                requestee_location: 'Seattle, WA',
+                requestee_rating: 4.7,
+                requester_skill: 'Python Development',
+                requested_skill: 'Digital Marketing',
+                message: 'Hi Alex! I noticed you offer digital marketing skills. I\'d be happy to teach you Python in exchange!',
+                status: 'pending',
+                created_at: '2025-01-08T16:45:00Z'
+            },
+            {
+                id: 'req4',
+                requestee_id: 'user5',
+                requestee_name: 'Lisa Park',
+                requestee_photo: 'https://via.placeholder.com/60',
+                requestee_location: 'Chicago, IL',
+                requestee_rating: 4.5,
+                requester_skill: 'Web Development',
+                requested_skill: 'Graphic Design',
+                message: 'Hello Lisa! I\'m interested in learning graphic design. I can help you with web development in return.',
+                status: 'accepted',
+                created_at: '2025-01-07T09:20:00Z'
+            }
+        ];
+
+        // tab switching
+        function showTab(tabName) {
+            // hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // show selected tab
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            // load appropriate data
+            if (tabName === 'received') {
+                loadReceivedRequests();
+            } else {
+                loadSentRequests();
+            }
+        }
+
+        // load received requests
+        function loadReceivedRequests() {
+            const container = document.getElementById('receivedRequestsList');
+            const emptyState = document.getElementById('receivedEmptyState');
+            
+            if (sampleReceivedRequests.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            container.style.display = 'block';
+            emptyState.style.display = 'none';
+            container.innerHTML = '';
+            
+            sampleReceivedRequests.forEach(request => {
+                const requestCard = createReceivedRequestCard(request);
+                container.appendChild(requestCard);
+            });
+        }
+
+        // load sent requests
+        function loadSentRequests() {
+            const container = document.getElementById('sentRequestsList');
+            const emptyState = document.getElementById('sentEmptyState');
+            
+            if (sampleSentRequests.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            container.style.display = 'block';
+            emptyState.style.display = 'none';
+            container.innerHTML = '';
+            
+            sampleSentRequests.forEach(request => {
+                const requestCard = createSentRequestCard(request);
+                container.appendChild(requestCard);
+            });
+        }
+
+        // create received request card
+        function createReceivedRequestCard(request) {
+            const card = document.createElement('div');
+            card.className = 'request-card';
+            
+            const statusClass = request.status === 'pending' ? 'status-pending' : 'status-' + request.status;
+            
+            card.innerHTML = `
+                <div class="request-header">
+                    <div class="requester-info">
+                        <img src="${request.requester_photo}" alt="${request.requester_name}" class="requester-photo">
+                        <div class="requester-details">
+                            <h3>${request.requester_name}</h3>
+                            <p class="location">${request.requester_location}</p>
+                            <div class="rating">
+                                <span class="stars">*****</span>
+                                <span class="rating-number">${request.requester_rating}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="request-status ${statusClass}">
+                        ${request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                    </div>
+                </div>
+                
+                <div class="swap-details">
+                    <div class="skill-exchange">
+                        <div class="skill-item">
+                            <strong>They offer:</strong>
+                            <span class="skill-tag offered">${request.requester_skill}</span>
+                        </div>
+                        <div class="swap-arrow">&lt;-&gt;</div>
+                        <div class="skill-item">
+                            <strong>They want:</strong>
+                            <span class="skill-tag wanted">${request.requested_skill}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="request-message">
+                    <strong>Message:</strong>
+                    <p>"${request.message}"</p>
+                </div>
+                
+                <div class="request-actions">
+                    <div class="request-date">
+                        ${formatDate(request.created_at)}
+                    </div>
+                    ${request.status === 'pending' ? `
+                        <div class="action-buttons">
+                            <button class="btn-danger" onclick="handleRequest('${request.id}', 'reject')">Reject</button>
+                            <button class="btn-primary" onclick="handleRequest('${request.id}', 'accept')">Accept</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // create sent request card
+        function createSentRequestCard(request) {
+            const card = document.createElement('div');
+            card.className = 'request-card';
+            
+            const statusClass = request.status === 'pending' ? 'status-pending' : 'status-' + request.status;
+            
+            card.innerHTML = `
+                <div class="request-header">
+                    <div class="requester-info">
+                        <img src="${request.requestee_photo}" alt="${request.requestee_name}" class="requester-photo">
+                        <div class="requester-details">
+                            <h3>${request.requestee_name}</h3>
+                            <p class="location">${request.requestee_location}</p>
+                            <div class="rating">
+                                <span class="stars">*****</span>
+                                <span class="rating-number">${request.requestee_rating}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="request-status ${statusClass}">
+                        ${request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                    </div>
+                </div>
+                
+                <div class="swap-details">
+                    <div class="skill-exchange">
+                        <div class="skill-item">
+                            <strong>You offer:</strong>
+                            <span class="skill-tag offered">${request.requester_skill}</span>
+                        </div>
+                        <div class="swap-arrow">&lt;-&gt;</div>
+                        <div class="skill-item">
+                            <strong>You want:</strong>
+                            <span class="skill-tag wanted">${request.requested_skill}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="request-message">
+                    <strong>Your message:</strong>
+                    <p>"${request.message}"</p>
+                </div>
+                
+                <div class="request-actions">
+                    <div class="request-date">
+                        ${formatDate(request.created_at)}
+                    </div>
+                    ${request.status === 'pending' ? `
+                        <div class="action-buttons">
+                            <button class="btn-secondary" onclick="cancelRequest('${request.id}')">Cancel Request</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // handle request actions
+        function handleRequest(requestId, action) {
+            const request = sampleReceivedRequests.find(r => r.id === requestId);
+            if (!request) return;
+            
+            const actionText = action === 'accept' ? 'accepted' : 'rejected';
+            
+            if (confirm(`Are you sure you want to ${action} this swap request?`)) {
+                // TODO: send to your backend API
+                console.log(`${action} request ${requestId}`);
+                
+                // update local data
+                request.status = actionText;
+                
+                // reload the view
+                loadReceivedRequests();
+                
+                if (action === 'accept') {
+                    alert('Swap request accepted! You can now start coordinating your skill exchange.');
+                }
+            }
+        }
+
+        // cancel sent request
+        function cancelRequest(requestId) {
+            if (confirm('Are you sure you want to cancel this request?')) {
+                // TODO: send delete request to your backend API
+                console.log(`Cancel request ${requestId}`);
+                
+                // remove from local data
+                const index = sampleSentRequests.findIndex(r => r.id === requestId);
+                if (index > -1) {
+                    sampleSentRequests.splice(index, 1);
+                }
+                
+                // reload the view
+                loadSentRequests();
+            }
+        }
+
+        // format date helper
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            
+            return date.toLocaleDateString();
+        }
+
+        // initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReceivedRequests(); // start with received requests tab
+        });
+    </script>
+</body>
+</html>
