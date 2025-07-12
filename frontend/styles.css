@@ -1,3 +1,32 @@
+/* CSS Custom Properties for Font System */
+:root {
+    /* Font Families */
+    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    
+    /* Font Sizes */
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-base: 1rem;     /* 16px */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-2xl: 1.5rem;    /* 24px */
+    --font-size-3xl: 1.875rem;  /* 30px */
+    --font-size-4xl: 2.25rem;   /* 36px */
+    
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Line Heights */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+}
+
 /* reset and base styles */
 * {
     margin: 0;
@@ -6,16 +35,59 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
     background-color: #ffffff;
     color: #333;
-    line-height: 1.6;
+    line-height: var(--line-height-normal);
+    font-feature-settings: 'kern' 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+/* Typography System */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: #1f2937;
+    letter-spacing: -0.025em;
+}
+
+h1 {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+}
+
+h2 {
+    font-size: var(--font-size-3xl);
+}
+
+h3 {
+    font-size: var(--font-size-xl);
+}
+
+p {
+    font-family: var(--font-primary);
+    line-height: var(--line-height-relaxed);
+}
+
+/* Form Elements */
+input, textarea, select {
+    font-family: var(--font-primary) !important;
+}
+
+label {
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
 }
 
 /* navigation styles */
@@ -36,8 +108,9 @@ body {
 }
 
 .nav-title {
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.025em;
 }
 
 .nav-items {
@@ -76,8 +149,10 @@ body {
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
     transition: background-color 0.2s;
 }
 
@@ -92,8 +167,10 @@ body {
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
     transition: all 0.2s;
 }
 
@@ -109,8 +186,10 @@ body {
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
     transition: background-color 0.2s;
 }
 
@@ -165,10 +244,24 @@ body {
 .login-card {
     background: white;
     padding: 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-radius: 16px;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     width: 100%;
     max-width: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1e3a8a, #3b82f6, #1e3a8a);
+    border-radius: 16px 16px 0 0;
 }
 
 .login-card h2 {
@@ -196,7 +289,9 @@ body {
 }
 
 .form-group label {
-    font-weight: 500;
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
     color: #374151;
 }
 
@@ -204,7 +299,9 @@ body {
     padding: 0.75rem;
     border: 2px solid #e5e7eb;
     border-radius: 8px;
-    font-size: 1rem;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
     transition: border-color 0.2s;
 }
 
@@ -268,7 +365,8 @@ body {
     border: 2px solid #e5e7eb;
     border-right: none;
     border-radius: 8px 0 0 8px;
-    font-size: 1rem;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
 }
 
 .filter-group {
@@ -282,6 +380,8 @@ body {
     border-radius: 8px;
     background-color: white;
     min-width: 150px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
 }
 
 .users-grid {
@@ -296,13 +396,14 @@ body {
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    border: 1px solid #e5e7eb;
-    transition: transform 0.2s, shadow 0.2s;
+    border: 2px solid #f1f5f9;
+    transition: all 0.3s ease;
 }
 
 .user-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    border-color: #cbd5e1;
 }
 
 .user-header {
@@ -373,8 +474,9 @@ body {
 .skill-tag {
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
 }
 
 .skill-tag.offered {
@@ -434,9 +536,23 @@ body {
 
 .profile-form {
     background: white;
-    border-radius: 12px;
+    border-radius: 16px;
+    border: 2px solid #e5e7eb;
     padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1e3a8a, #3b82f6, #1e3a8a);
+    border-radius: 16px 16px 0 0;
 }
 
 .photo-section {
@@ -661,7 +777,13 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     margin-bottom: 1rem;
-    border: 1px solid #e5e7eb;
+    border: 2px solid #f1f5f9;
+    transition: all 0.3s ease;
+}
+
+.skill-detail-card:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border-color: #cbd5e1;
 }
 
 .skill-detail-card h4 {
