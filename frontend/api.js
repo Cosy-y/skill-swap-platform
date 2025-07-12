@@ -257,10 +257,10 @@ document.addEventListener('DOMContentLoaded', function() {
         api.redirectToHome();
     }
     
-    // if not on login page and not logged in, redirect to login
-    if (!window.location.pathname.includes('index.html') && !api.isLoggedIn()) {
-        api.redirectToLogin();
-    }
+    // commented out automatic redirect for demo purposes
+    // if (!window.location.pathname.includes('index.html') && !api.isLoggedIn()) {
+    //     api.redirectToLogin();
+    // }
     
     // update navigation with user info
     updateNavigation();

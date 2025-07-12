@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillSwap - Login</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="api.js"></script>
 </head>
 <body>
     <!-- top navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <h1 class="nav-title">SkillSwap</h1>
-            <a href="home.html" class="nav-link">Home</a>
+            <div class="nav-items">
+                <a href="home.html" class="nav-link">Browse Users</a>
+                <a href="signup.html" class="nav-link">Sign Up</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="requests.html" class="nav-link">Requests</a>
+            </div>
         </div>
     </nav>
 
@@ -21,6 +25,14 @@
         <div class="login-card">
             <h2>Login to SkillSwap</h2>
             <p>enter your account details</p>
+            
+            <div class="quick-nav" style="margin-bottom: 20px; text-align: center;">
+                <h3>Quick Navigation (No Login Required):</h3>
+                <a href="home.html" style="display: inline-block; margin: 10px; padding: 10px 20px; background: #1e3a8a; color: white; text-decoration: none; border-radius: 5px;">Browse Users</a>
+                <a href="profile.html" style="display: inline-block; margin: 10px; padding: 10px 20px; background: #1e3a8a; color: white; text-decoration: none; border-radius: 5px;">Profile Page</a>
+                <a href="requests.html" style="display: inline-block; margin: 10px; padding: 10px 20px; background: #1e3a8a; color: white; text-decoration: none; border-radius: 5px;">Requests</a>
+                <a href="signup.html" style="display: inline-block; margin: 10px; padding: 10px 20px; background: #1e3a8a; color: white; text-decoration: none; border-radius: 5px;">Sign Up</a>
+            </div>
             
             <form class="login-form" id="loginForm">
                 <div class="form-group">
@@ -45,35 +57,5 @@
             </form>
         </div>
     </div>
-
-    <script>
-        // real login functionality with backend API
-        async function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                api.showMessage('Please fill in all fields', 'error');
-                return;
-            }
-            
-            try {
-                const response = await api.login(email, password);
-                api.showMessage('Login successful!', 'success');
-                setTimeout(() => {
-                    api.redirectToHome();
-                }, 1000);
-            } catch (error) {
-                api.showMessage(error.message, 'error');
-            }
-        }
-        
-        // attach event listener when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-        });
-    </script>
 </body>
 </html>
