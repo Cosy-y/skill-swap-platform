@@ -1,0 +1,16 @@
+# Python venv
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VS Code
+.vscode/
+
+# Mac/Windows junk
+.DS_Store
+Thumbs.db
+
+# Firebase key 
+*.json
